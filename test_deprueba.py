@@ -1,5 +1,5 @@
-Saldo=0
 def Recarga(monto):
+	Saldo=0
 	Saldo+=monto
 	if monto==196:
 		Saldo+=34
