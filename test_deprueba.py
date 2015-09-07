@@ -8,8 +8,8 @@ def Recarga(monto):
 	return Saldo
 
 def test_recarga():
-	assert Recarga(1)=1
-	assert Recarga(197)=197
-	assert Recarga(196)=230
-	assert Recarga(367)=367
-	assert Recarga(368)=460
+	assert Recarga(1)==1
+	assert Recarga(197)==197
+	assert Recarga(196)==230
+	assert Recarga(367)==367
+	assert Recarga(368)==460
