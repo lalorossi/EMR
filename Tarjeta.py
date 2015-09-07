@@ -17,50 +17,56 @@ class Tarjeta():
 		elif monto==368:
 			self._Saldo+=92
 
+	def setUltimoViaje(self, colectivo, hora, monto):
+		self._UltimoViaje=Viaje(colectivo, hora, monto)
+
 	def getViajesRealizados(self):
 		return self._Viajes
 
 	def AgregarViaje(self):
-		self._Viajes+=self._UltimoViaje
+		# Podria llamar aca a setUltimoViaje
+		self._Viajes+=self._UltimoViaje # Esto funciona?
 
-	def EsTransbordo(self, hora, colectivo):
+	def EsTransbordo(self, hora, colectivo): # En vez de pasar colectivo, no tendria que pasar viaje?
 		if(!isinstance(self._UltimoViaje, Viaje)):
 			return False
 		else:
 			self._ultimaHora=self._UltimoViaje.getHora()
-			self._HoraViaje=hora
+			self._HoraViaje=hora # Y esto de donde sale?
 			if self._HoraViaje-self._ultimaHora <=3600 and self._UltimoViaje.getColectivo()!=colectivo:
 				return True
 			else:
 				return False
-
-	def setUltimoViaje(self, colectivo, hora, monto):
-		self._UltimoViaje=Viaje(colectivo, hora, monto)
 
 
 
 class TarjetaComun(Tarjeta):
 
 	def __init__(self):
+		self.setSaldo()
+		self.setViajes()
+
+	def setSaldo(self):
 		self._Saldo=0
+
+	def setViajes(self):
 		self._Viajes=0	
 
 	def PagarBoleto(self, colectivo, hora):
 
-		transbordo=self.EsTransbordo(hora)
-
+		# transbordo=self.EsTransbordo(hora)
 
 		if(!self.EsTransbordo(hora, colectivo)):
 			if self.getSaldo()>=5.75
 				self._Saldo=self._Saldo-5.75
 				self.setUltimoViaje(colectivo, hora, 5.75)
-				self.AgregarViaje(self._UltimoViaje)
+				self.AgregarViaje(self._UltimoViaje) #
 				return True
 
 			else:
 				return False
 
-		else
+		else:
 			if self.getSaldo()>=1.90
 				self._Saldo-=1.90
 				self.setUltimoViaje(colectivo, hora, 1.90)
@@ -79,8 +85,14 @@ class TarjetaMedioBoleto(Tarjeta):
 	hora24=datetime.strptime("diadehoy 00:00", "%d/%m/%Y %H:%M")
 
 	def __init__(self):
+		self.setSaldo()
+		self.setViajes()
+
+	def setSaldo(self):
 		self._Saldo=0
-		self._Viajes=0
+
+	def setViajes(self):
+		self._Viajes=0		
 
 	def PagarBoleto(self, colectivo, hora):
 		if (!self.EsTransbordo(hora, colectivo)):
@@ -90,20 +102,35 @@ class TarjetaMedioBoleto(Tarjeta):
 					self._UltimoViaje=Viaje(colectivo, hora, 2.90)
 					self.AgregarViaje(self._UltimoViaje)
 					return True
-
 				else:
 					return False
-
-		else
+			else:
+				if self.getSaldo()>=5.75
+					self._Saldo=self._Saldo-5.75
+					self.setUltimoViaje(colectivo, hora, 5.75)
+					self.AgregarViaje(self._UltimoViaje) 
+					return True
+				else:
+					return False
+				
+		else:
 			if hora>=hora6 and hora<=hora24:
 				if self.getSaldo()>=0.96:
 					self._Saldo-=0.96
 					self._UltimoViaje=Viaje(colectivo, hora, 0.96)
 					self.AgregarViaje(self._UltimoViaje)
 					return True
-
 				else:
 					return False
+			else:
+				if self.getSaldo()>=1.90
+					self._Saldo-=1.90
+					self.setUltimoViaje(colectivo, hora, 1.90)
+					self.AgregarViaje(self._UltimoViaje)
+					return True
+				else:
+					return False
+
 			
 
 class Colectivo:
@@ -132,7 +159,7 @@ class Colectivo:
 
 
 class Viaje:
-"""			   (colectivo, time, bool)"""
+"""			   			(colectivo, time, int)"""
 	def __init__ (self, colectivo, hora, monto):
 		self.setColectivo(colectivo)
 		self.setHora(hora)
