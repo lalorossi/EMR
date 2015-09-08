@@ -2,6 +2,13 @@
 from datetime import *
 #AGREGAR VIAJE PLUS
 
+import math
+
+#Funcion para trabajar con 2 decimales, si no, causa errores
+def trunc(invalue, digits):
+    return int(invalue*math.pow(10,digits))/math.pow(10,digits)
+
+
 
 class Tarjeta():
 	def __init__(self):
@@ -10,6 +17,7 @@ class Tarjeta():
 		self._Viajes=[]
 
 	def getSaldo(self):
+		self._Saldo=trunc(self._Saldo, 2)
 		return self._Saldo
 
 	def Recarga(self, monto):
@@ -18,6 +26,7 @@ class Tarjeta():
 			self._Saldo+=34
 		elif monto==368:
 			self._Saldo+=92
+		self._Saldo=trunc(self._Saldo, 2)
 
 	def setUltimoViaje(self, colectivo, hora, monto):
 		self._UltimoViaje=Viaje(colectivo, hora, monto)
@@ -38,9 +47,11 @@ class Tarjeta():
 
 
 	def EsTransbordo(self, hora, colectivo):
-		if(self._CantViajes!=1 or self._UltimoViaje.getMonto()==2.90 or self._UltimoViaje.getMonto()==0.96):
+		if(self._CantViajes!=1):
 			return False
 		else:
+			if(self._UltimoViaje.getMonto()==1.90 or self._UltimoViaje.getMonto()==0.96):
+				return False
 			#Para hacerlo mas seguro, no confiamos en solo comparar con el numero de linea
 			#Ya que podemos tomar un colectivo de ida, y luego la misma linea de vuelta
 			#Tampoco comparamos solo el numero interno, porque distintas empresas pueden usar el mismo numero interno para distintos colectivos
@@ -72,6 +83,7 @@ class TarjetaComun(Tarjeta):
 		if(self.EsTransbordo(hora, colectivo)==False):
 			if (self.getSaldo() >= 5.75):
 				self._Saldo=self._Saldo-5.75
+				self._Saldo=trunc(self._Saldo, 2)
 				self.setUltimoViaje(colectivo, hora, 5.75)
 				self.Formateo(colectivo, hora, 5.75)
 				self.AgregarViaje() 
@@ -83,6 +95,7 @@ class TarjetaComun(Tarjeta):
 		else:
 			if self.getSaldo()>=1.90:
 				self._Saldo-=1.90
+				self._Saldo=trunc(self._Saldo, 2)
 				self.setUltimoViaje(colectivo, hora, 1.90)
 				self.Formateo(colectivo, hora, 1.90)
 				self.AgregarViaje()
@@ -99,7 +112,6 @@ class TarjetaMedioBoleto(Tarjeta):
 	def __init__(self):
 		self._Hora6=datetime.today()
 		self._Hora6=self._Hora6.replace(hour=06, minute=00, second=00, microsecond=00)
-		#print self._Hora6
 		self._Hora24=datetime.today()
 		self._Hora24=self._Hora24.replace(hour=23, minute=59, second=59, microsecond=9999)
 		self.setSaldo()
@@ -120,6 +132,7 @@ class TarjetaMedioBoleto(Tarjeta):
 			if self._hora >= self._Hora6 and self._hora <= self._Hora24:
 				if self.getSaldo()>=2.90:
 					self._Saldo-=2.90
+					self._Saldo=trunc(self._Saldo, 2)
 					self._UltimoViaje=Viaje(colectivo, self._hora, 2.90)
 					self.Formateo(colectivo, self._hora, 2.90)
 					self.AgregarViaje()
@@ -129,6 +142,7 @@ class TarjetaMedioBoleto(Tarjeta):
 			else:
 				if self.getSaldo()>=5.75:
 					self._Saldo=self._Saldo-5.75
+					self._Saldo=trunc(self._Saldo, 2)
 					self.setUltimoViaje(colectivo, self._hora, 5.75)
 					self.Formateo(colectivo, self._hora, 5.75)
 					self.AgregarViaje() 
@@ -140,6 +154,7 @@ class TarjetaMedioBoleto(Tarjeta):
 			if self._hora>=self._Hora6 and self._hora<=self._Hora24:
 				if self.getSaldo()>=0.96:
 					self._Saldo-=0.96
+					self._Saldo=trunc(self._Saldo, 2)
 					self._UltimoViaje=Viaje(colectivo, self._hora, 0.96)
 					self.Formateo(colectivo, self._hora, 0.96)
 					self.AgregarViaje()
@@ -149,6 +164,7 @@ class TarjetaMedioBoleto(Tarjeta):
 			else:
 				if self.getSaldo()>=1.90:
 					self._Saldo-=1.90
+					self._Saldo=trunc(self._Saldo, 2)
 					self.setUltimoViaje(colectivo, self._hora, 1.90)
 					self.Formateo(colectivo, self._hora, 1.90)
 					self.AgregarViaje()
