@@ -29,19 +29,24 @@ class Tarjeta():
 
 	def AgregarViaje(self):
 		self._Viajes.append(self._UltimoViajeFormat)
+		self._CantViajes=1
+		print self._CantViajes
+		#Esta bandera se hace para ver si hay al menos un viaje realizado (y poder compararlo en EsTransbordo)
+		#Anda
 
 	def getViajesRealizados(self):
 		return self._Viajes
 
-	def EsTransbordo(self, hora, colectivo): # En vez de pasar colectivo, no tendria que pasar viaje? (NO)
-		if(len(self._Viajes)==0):
+
+	def EsTransbordo(self, hora, colectivo):
+		if(self._CantViajes!=1):
 			return False
 		else:
 			#Para hacerlo mas seguro, no confiamos en solo comparar con el numero de linea
 			#Ya que podemos tomar un colectivo de ida, y luego la misma linea de vuelta
 			#Tampoco comparamos solo el numero interno, porque distintas empresas pueden usar el mismo numero interno para distintos colectivos
 			#Por lo tanto, comparamos la empresa, el numero interno y la linea, para estar seguros de que el colectivo no es el mismo
-			if (hora-self._UltimoViaje.getHora() <= timedelta(hours=1) and self._UltimoViaje.getColectivo().getNint() != colectivo.getNint() and self._UltimoViaje().getColectivo.getLinea() != colectivo.getLinea() and self._UltimoViaje.getColectivo.getEmpresa() != colectivo.getEmpresa()):
+			if (hora-self._UltimoViaje.getHora() <= timedelta(hours=1) and self._UltimoViaje.getColectivo().getNint() != colectivo.getNint() and self._UltimoViaje.getColectivo().getLinea() != colectivo.getLinea() and self._UltimoViaje.getColectivo().getEmpresa() != colectivo.getEmpresa()):
 				return True
 			else:
 				return False
@@ -59,12 +64,13 @@ class TarjetaComun(Tarjeta):
 
 	def setViajes(self):
 		self._Viajes=[]
+		self._CantViajes=0
 
 	def PagarBoleto(self, colectivo):
 
 		hora = datetime.today()
 
-		if(not self.EsTransbordo(hora, colectivo)):
+		if(self.EsTransbordo(hora, colectivo)==False):
 			if (self.getSaldo() >= 5.75):
 				self._Saldo=self._Saldo-5.75
 				self.setUltimoViaje(colectivo, hora, 5.75)
@@ -104,13 +110,14 @@ class TarjetaMedioBoleto(Tarjeta):
 		self._Saldo=0
 
 	def setViajes(self):
-		self._Viajes=[]	
+		self._Viajes=[]
+		self._CantViajes=0
 
 	def PagarBoleto(self, colectivo):
 
 		self._hora = datetime.today()
 		
-		if (not self.EsTransbordo(self._hora, colectivo)):
+		if (self.EsTransbordo(self._hora, colectivo)==False):
 			if self._hora >= self._Hora6 and self._hora <= self._Hora24:
 				if self.getSaldo()>=2.90:
 					self._Saldo-=2.90

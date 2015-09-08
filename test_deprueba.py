@@ -8,7 +8,7 @@ violeta = TarjetaMedioBoleto()
 
 cole1 = Colectivo("Semtur", 122, 1111)
 
-cole2 = Colectivo("Rosario", 'k', 7493)
+cole2 = Colectivo("Rosario", 123, 7493)
 
 
 def test_Recarga():
@@ -45,8 +45,8 @@ def test_Recarga():
 	assert violeta.getSaldo() == (460 - 2.90)
 
 	#Pruebo el transbordo con una tarjeta comun y otra de miedio boleto
-	amarillo.PagarBoleto(cole1)
-	violeta.PagarBoleto(cole1)
+	amarillo.PagarBoleto(cole2)
+	violeta.PagarBoleto(cole2)
 
 	#Luego compruebo sus cargas para saber si funciona el transbordo
 	assert amarillo.getSaldo() == (230 - 5.75 - 1.90)
