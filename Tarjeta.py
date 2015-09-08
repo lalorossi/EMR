@@ -38,7 +38,7 @@ class Tarjeta():
 
 
 	def EsTransbordo(self, hora, colectivo):
-		if(self._CantViajes!=1):
+		if(self._CantViajes!=1 or self._UltimoViaje.getMonto()==2.90 or self._UltimoViaje.getMonto()==0.96):
 			return False
 		else:
 			#Para hacerlo mas seguro, no confiamos en solo comparar con el numero de linea
