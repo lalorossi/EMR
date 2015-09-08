@@ -20,6 +20,13 @@ def test_Tarjeta():
 	assert violeta.PagarBoleto(cole2) == False
 
 
+	#Compruebo que no haya viajes realizados
+	assert azul.getViajesRealizados() == []
+	assert amarillo.getViajesRealizados() == []
+	assert naranja.getViajesRealizados() == []
+	assert violeta.getViajesRealizados() == []
+
+
 	#Recargo las tarjetas
 	azul.Recarga(3)
 	amarillo.Recarga(196)
@@ -39,6 +46,15 @@ def test_Tarjeta():
 	assert amarillo.PagarBoleto(cole1) == True
 	assert naranja.PagarBoleto(cole1) == True
 	assert violeta.PagarBoleto(cole1) == True
+
+	print len(azul.getViajesRealizados())
+	print azul._CantViajes
+
+	assert len(azul.getViajesRealizados()) == 0
+	assert len(amarillo.getViajesRealizados()) == 1
+	assert len(naranja.getViajesRealizados()) == 1
+	assert len(violeta.getViajesRealizados()) == 1
+
 
 
 	#Compruebo las cargas de las tarjetas luego de pagar los boletos
