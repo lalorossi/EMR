@@ -30,7 +30,6 @@ class Tarjeta():
 	def AgregarViaje(self):
 		self._Viajes.append(self._UltimoViajeFormat)
 		self._CantViajes=1
-		print self._CantViajes
 		#Esta bandera se hace para ver si hay al menos un viaje realizado (y poder compararlo en EsTransbordo)
 		#Anda
 
