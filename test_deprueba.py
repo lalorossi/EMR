@@ -1,15 +1,25 @@
-def Recarga(monto):
-	Saldo=0
-	Saldo+=monto
-	if monto==196:
-		Saldo+=34
-	elif monto==368:
-		Saldo+=92
-	return Saldo
+from Tarjeta import *
 
-def test_recarga():
-	assert Recarga(1)==1
-	assert Recarga(197)==197
-	assert Recarga(196)==230
-	assert Recarga(367)==367
-	assert Recarga(368)==460
+azul = TarjetaComun()
+amarillo = TarjetaComun()
+
+naranja = TarjetaMedioBoleto
+violeta = TarjetaMedioBoleto()
+
+cole1 = Colectivo("Semtur", 122, 1111)
+
+cole2 = Colectivo("Rosario", 'k', 7493)
+
+def Test_Recarga():
+	 azul.Recarga(20)
+	 amarillo.Recarga(196)
+	 naranja.Recarga(0)
+	 violeta.Recarga(368)
+
+	assert azul.getSaldo() == 20
+	assert amarillo.getSaldo() == 230
+	assert naranja.getSaldo() == 0
+	assert violeta.getSaldo() == 460
+
+
+
