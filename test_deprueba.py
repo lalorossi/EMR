@@ -245,3 +245,37 @@ def test_PagarBoleto():
 	assert amarillo.PagarBoleto(cole2) == True
 	assert amarillo.PagarBoleto(cole2) == True
 	assert amarillo.PagarBoleto(cole1) == True
+
+def test_Viajes():
+
+	azul = TarjetaComun()
+	amarillo = TarjetaComun()
+
+	naranja = TarjetaMedioBoleto()
+	violeta = TarjetaMedioBoleto()
+
+	cole1 = Colectivo("Semtur", 122, 1111)
+	cole2 = Colectivo("Rosario", 'k', 7493)
+	cole3 = Colectivo("Mixta", 101, 0666)
+
+	#Le doy carga suficiente a las tarjetas
+	azul.Recarga(368)	
+	amarillo.Recarga(368)	
+	naranja.Recarga(368)	
+	violeta.Recarga(368)
+
+	#Hago 3 viajes con cada tarjeta, pero alternando entre transbordos o no transbordos
+	#normal, normal, normal
+	azul.PagarBoleto(cole1)	
+	azul.PagarBoleto(cole1)	
+	azul.PagarBoleto(cole1)
+
+	#normal, normal, transbordo
+	amarillo.PagarBoleto(cole1)	
+	amarillo.PagarBoleto(cole1)	
+	amarillo.PagarBoleto(cole2)
+
+	#normal, transbordo, normal
+	naranja.PagarBoleto(cole1)	
+	naranja.PagarBoleto(cole2)	
+	naranja.PagarBoleto(cole3)	
