@@ -46,12 +46,18 @@ class Tarjeta():
 		self._UltimoViaje=Viaje(colectivo, hora, monto)
 		
 	def Recarga(self, monto):
-		self._Saldo+=monto
-		if monto==196:
-			self._Saldo+=34
-		elif monto==368:
-			self._Saldo+=92
-		self._Saldo=trunc(self._Saldo, 2)
+		if monto>0:
+			self._Saldo+=monto
+			if monto==196:
+				self._Saldo+=34
+				return 230
+			elif monto==368:
+				self._Saldo+=92
+				return 460
+			self._Saldo=trunc(self._Saldo, 2)
+			return monto
+		else:
+			return 0
 
 
 

@@ -1,17 +1,7 @@
 from Tarjeta import *
 
-azul = TarjetaComun()
-amarillo = TarjetaComun()
 
-naranja = TarjetaMedioBoleto()
-violeta = TarjetaMedioBoleto()
-
-cole1 = Colectivo("Semtur", 122, 1111)
-
-cole2 = Colectivo("Rosario", 'k', 7493)
-
-
-def test_Tarjeta():
+def Tarjeta():
 
 	#Pruebo de pagar boletos sin recarga
 	assert azul.PagarBoleto(cole1) == False
@@ -127,9 +117,131 @@ def test_Tarjeta():
 	assert violeta.getSaldo() == (480.24)
 
 
+def test_Recarga():
+
+	azul = TarjetaComun()
+	amarillo = TarjetaComun()
+
+	naranja = TarjetaMedioBoleto()
+	violeta = TarjetaMedioBoleto()
+
+	cole1 = Colectivo("Semtur", 122, 1111)
+	cole2 = Colectivo("Rosario", 'k', 7493)
+
+	#Recargo las tarjetas, y devuelve el monto recargado
+	assert azul.Recarga(3) == 3
+	assert azul.Recarga(0) == 0
+	assert amarillo.Recarga(196) == 230
+	assert amarillo.Recarga(197) == 197
+	assert naranja.Recarga(-3) == 0
+	assert naranja.Recarga(5) == 5
+	assert violeta.Recarga(368) == 460
+	assert violeta.Recarga(-196) == 0
+
+
+def test_getSaldo():
+
+	azul = TarjetaComun()
+	amarillo = TarjetaComun()
+
+	naranja = TarjetaMedioBoleto()
+	violeta = TarjetaMedioBoleto()
+
+	cole1 = Colectivo("Semtur", 122, 1111)
+	cole2 = Colectivo("Rosario", 'k', 7493)
+
+	#saldo cuando recien se incia la trjeta
+	assert azul.getSaldo() == 0
+	assert naranja.getSaldo() == 0
+	assert amarillo.getSaldo() == 0
+	assert violeta.getSaldo() == 0
+
+	#cargas de distintos valores para comprobar que se suman al valor anterior
+	azul.Recarga(3)
+	assert azul.getSaldo() == 3
+	azul.Recarga(0)
+	assert azul.getSaldo() == 3
+	amarillo.Recarga(196)
+	assert amarillo.getSaldo() == 230
+	amarillo.Recarga(197)
+	assert amarillo.getSaldo() == 427
+	naranja.Recarga(-3)
+	assert naranja.getSaldo() == 0
+	naranja.Recarga(5)
+	assert naranja.getSaldo() == 5
+	violeta.Recarga(368)
+	assert violeta.getSaldo() == 460
+	violeta.Recarga(-196)
+	assert violeta.getSaldo() == 460
 
 
 
 
+def test_PagarBoleto():
 
-#test_Tarjeta()
+	azul = TarjetaComun()
+	amarillo = TarjetaComun()
+
+	naranja = TarjetaMedioBoleto()
+	violeta = TarjetaMedioBoleto()
+
+	cole1 = Colectivo("Semtur", 122, 1111)
+	cole2 = Colectivo("Rosario", 'k', 7493)
+	cole3 = Colectivo("Mixta", 101, 0666)
+
+	#Pagar un boleto cuando recien se incia la tarjeta
+	assert azul.PagarBoleto(cole1) == False
+	assert naranja.PagarBoleto(cole1) == False
+	assert amarillo.PagarBoleto(cole1) == False
+	assert violeta.PagarBoleto(cole1) == False
+
+	#Pagar 2 boletos con $6 y sin transbordo
+	azul.Recarga(6)
+	assert azul.PagarBoleto(cole1) == True
+	assert azul.PagarBoleto(cole1) == False
+
+	#Pagar un viaje normal, despues un transbordo, y luego otro que contaria como transbordo si no hubiera un transbordo anterior
+	azul.Recarga(9)
+	assert azul.PagarBoleto(cole3) == True
+	assert azul.PagarBoleto(cole1) == True
+	assert azul.PagarBoleto(cole2) == False
+
+
+	#Tomar dos colectivos iguales sin suficiente saldo, y luego un transbordo con saldo suficiente
+	amarillo.Recarga(8)
+	assert amarillo.PagarBoleto(cole1) == True
+	assert amarillo.PagarBoleto(cole1) == False
+	assert amarillo.PagarBoleto(cole2) == True
+
+	#Pagar 4 boletos seguidos, sin importar el valor o el transbordo, teniendo saldo suficiente
+	amarillo.Recarga(196)
+	assert amarillo.PagarBoleto(cole1) == True
+	assert amarillo.PagarBoleto(cole1) == True
+	assert amarillo.PagarBoleto(cole2) == True
+	assert amarillo.PagarBoleto(cole2) == True
+
+	#Tomar dos colectivos iguales sin suficiente saldo, y luego un transbordo con saldo suficiente, pero con los precios de medio boleto
+	naranja.Recarga(4)
+	assert naranja.PagarBoleto(cole1) == True
+	assert naranja.PagarBoleto(cole1) == False
+	assert naranja.PagarBoleto(cole2) == True
+
+
+	#Pagar el boleto con plata insuficiente (no con $0 de saldo)
+	naranja.Recarga(0)
+	assert naranja.PagarBoleto(cole1) == False
+
+
+	#Dos medio boleto en el mismo colectivo
+	violeta.Recarga(6)
+	assert violeta.PagarBoleto(cole1) == True
+	assert violeta.PagarBoleto(cole1) == True
+
+
+	#4 viajes en el siguiente orden:
+	#normal, transbordo, normal, transbordo, pero no puedo pagar el ultimo
+	violeta.Recarga(7)
+	assert amarillo.PagarBoleto(cole1) == True
+	assert amarillo.PagarBoleto(cole2) == True
+	assert amarillo.PagarBoleto(cole2) == True
+	assert amarillo.PagarBoleto(cole1) == True
