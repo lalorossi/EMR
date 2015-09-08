@@ -62,9 +62,9 @@ def test_Tarjeta():
 	#Compruebo las cargas de las tarjetas luego de pagar los boletos
 	#En algunos casos, escribir un numero con decimal en lugar de la resta del saldo y el monto, da problemas de redondeo
 	assert azul.getSaldo() == 3
-	assert amarillo.getSaldo() == (224.25)
-	assert naranja.getSaldo() == (0.1)
-	assert violeta.getSaldo() == (457.1)
+	assert amarillo.getSaldo() == 224.25
+	assert naranja.getSaldo() == 0.10
+	assert violeta.getSaldo() == 457.10
 
 
 	#Pruebo el transbordo con una tarjeta comun y otra de miedio boleto
@@ -88,9 +88,9 @@ def test_Tarjeta():
 
 	#Luego compruebo sus cargas para saber si funciona el transbordo
 	assert azul.getSaldo() == 3
-	assert amarillo.getSaldo() == (222.35)
-	assert naranja.getSaldo() == (0.1)
-	assert violeta.getSaldo() == (456.14)
+	assert amarillo.getSaldo() == 222.35
+	assert naranja.getSaldo() == 0.10
+	assert violeta.getSaldo() == 456.14
 
 
 	#Ultima recarga, viaje y chequeo de saldo
@@ -108,6 +108,18 @@ def test_Tarjeta():
 	assert amarillo.PagarBoleto(cole1) == True #No es transbordo, porque ya se uso antes
 	assert naranja.PagarBoleto(cole1) == False
 	assert violeta.PagarBoleto(cole2) == True
+
+
+	assert len(azul.getViajesRealizados()) == 1
+	assert len(amarillo.getViajesRealizados()) == 3
+	assert len(naranja.getViajesRealizados()) == 1
+	assert len(violeta.getViajesRealizados()) == 3
+
+	assert azul.getViajesRealizados()[azul.getCantViajes()-1].getColectivo().getLinea() == 122
+	assert amarillo.getViajesRealizados()[amarillo.getCantViajes()-1].getColectivo().getLinea() == 122
+	assert naranja.getViajesRealizados()[naranja.getCantViajes()-1].getColectivo().getLinea() == 122
+	assert violeta.getViajesRealizados()[violeta.getCantViajes()-1].getColectivo().getLinea() == 'k'
+
 
 	assert azul.getSaldo() == 0
 	assert amarillo.getSaldo() == (226.60)

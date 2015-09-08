@@ -1,6 +1,5 @@
 
 from datetime import *
-#AGREGAR VIAJE PLUS
 
 import math
 
@@ -93,7 +92,6 @@ class TarjetaComun(Tarjeta):
 				self.Formateo(colectivo, hora, 5.75)
 				self.AgregarViaje() 
 				return True
-
 			else:
 				return False
 
@@ -159,6 +157,7 @@ class TarjetaMedioBoleto(Tarjeta):
 					return True
 				else:
 					return False
+					
 			else:
 				if self.getSaldo()>=1.90:
 					self._Saldo-=1.90
