@@ -8,7 +8,7 @@ violeta = TarjetaMedioBoleto()
 
 cole1 = Colectivo("Semtur", 122, 1111)
 
-cole2 = Colectivo("Rosario", 123, 7493)
+cole2 = Colectivo("Rosario", 'k', 7493)
 
 
 def test_Tarjeta():
@@ -43,17 +43,19 @@ def test_Tarjeta():
 
 	#Pruebo de pagar boletos con la carga hecha
 	assert azul.PagarBoleto(cole1) == False
-	assert amarillo.PagarBoleto(cole1) == True
+	assert amarillo.PagarBoleto(cole2) == True
 	assert naranja.PagarBoleto(cole1) == True
 	assert violeta.PagarBoleto(cole1) == True
 
-	print len(azul.getViajesRealizados())
-	print azul._CantViajes
 
 	assert len(azul.getViajesRealizados()) == 0
 	assert len(amarillo.getViajesRealizados()) == 1
 	assert len(naranja.getViajesRealizados()) == 1
 	assert len(violeta.getViajesRealizados()) == 1
+
+	assert amarillo.getViajesRealizados()[amarillo.getCantViajes()-1].getColectivo().getLinea() == 'k'
+	assert naranja.getViajesRealizados()[naranja.getCantViajes()-1].getColectivo().getLinea() == 122
+	assert violeta.getViajesRealizados()[violeta.getCantViajes()-1].getColectivo().getLinea() == 122
 
 
 
@@ -68,9 +70,20 @@ def test_Tarjeta():
 	#Pruebo el transbordo con una tarjeta comun y otra de miedio boleto
 	#Con las otras tarjetas, compruebo que se hayan quedado sin carga
 	assert azul.PagarBoleto(cole2) == False 
-	assert amarillo.PagarBoleto(cole2) == True #TRANSBORDO
+	assert amarillo.PagarBoleto(cole1) == True #TRANSBORDO
 	assert naranja.PagarBoleto(cole2) == False 
 	assert violeta.PagarBoleto(cole2) == True #TRANSBORDO
+
+
+	assert len(azul.getViajesRealizados()) == 0
+	assert len(amarillo.getViajesRealizados()) == 2
+	assert len(naranja.getViajesRealizados()) == 1
+	assert len(violeta.getViajesRealizados()) == 2
+
+
+	assert amarillo.getViajesRealizados()[amarillo.getCantViajes()-1].getColectivo().getLinea() == 122
+	assert naranja.getViajesRealizados()[naranja.getCantViajes()-1].getColectivo().getLinea() == 122
+	assert violeta.getViajesRealizados()[violeta.getCantViajes()-1].getColectivo().getLinea() == 'k'
 
 
 	#Luego compruebo sus cargas para saber si funciona el transbordo

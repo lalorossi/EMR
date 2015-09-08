@@ -16,10 +16,36 @@ class Tarjeta():
 		return False
 		self._Viajes=[]
 
+	def setSaldo(self):
+		self._Saldo=0
+
 	def getSaldo(self):
 		self._Saldo=trunc(self._Saldo, 2)
 		return self._Saldo
 
+	def setViajes(self):
+		self._Viajes=[]
+		self._CantViajes=0
+
+	def getCantViajes(self):
+		return self._CantViajes
+
+	def AgregarViaje(self):
+		self._Viajes.append(self._UltimoViajeFormat)
+		self._CantViajes+=1
+		#Esta bandera se hace para ver si hay al menos un viaje realizado (y poder compararlo en EsTransbordo)
+		#Anda
+
+	def Formateo(self, colectivo, hora, monto):
+		formato = "%a %d %b %Y %H:%M:%S"
+		hora = hora.strftime(formato)
+		self._UltimoViajeFormat=Viaje(colectivo, hora, monto)
+	def getViajesRealizados(self):
+		return self._Viajes
+		
+	def setUltimoViaje(self, colectivo, hora, monto):
+		self._UltimoViaje=Viaje(colectivo, hora, monto)
+		
 	def Recarga(self, monto):
 		self._Saldo+=monto
 		if monto==196:
@@ -28,22 +54,8 @@ class Tarjeta():
 			self._Saldo+=92
 		self._Saldo=trunc(self._Saldo, 2)
 
-	def setUltimoViaje(self, colectivo, hora, monto):
-		self._UltimoViaje=Viaje(colectivo, hora, monto)
 
-	def Formateo(self, colectivo, hora, monto):
-		formato = "%a %d %b %Y %H:%M:%S"
-		hora = hora.strftime(formato)
-		self._UltimoViajeFormat=Viaje(colectivo, hora, monto)
 
-	def AgregarViaje(self):
-		self._Viajes.append(self._UltimoViajeFormat)
-		self._CantViajes=1
-		#Esta bandera se hace para ver si hay al menos un viaje realizado (y poder compararlo en EsTransbordo)
-		#Anda
-
-	def getViajesRealizados(self):
-		return self._Viajes
 
 
 	def EsTransbordo(self, hora, colectivo):
@@ -68,13 +80,6 @@ class TarjetaComun(Tarjeta):
 	def __init__(self):
 		self.setSaldo()
 		self.setViajes()
-
-	def setSaldo(self):
-		self._Saldo=0
-
-	def setViajes(self):
-		self._Viajes=[]
-		self._CantViajes=0
 
 	def PagarBoleto(self, colectivo):
 
@@ -116,13 +121,6 @@ class TarjetaMedioBoleto(Tarjeta):
 		self._Hora24=self._Hora24.replace(hour=23, minute=59, second=59, microsecond=9999)
 		self.setSaldo()
 		self.setViajes()
-
-	def setSaldo(self):
-		self._Saldo=0
-
-	def setViajes(self):
-		self._Viajes=[]
-		self._CantViajes=0
 
 	def PagarBoleto(self, colectivo):
 
