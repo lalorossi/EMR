@@ -94,7 +94,7 @@ class TarjetaMedioBoleto(Tarjeta):
 	def __init__(self):
 		self._Hora6=datetime.today()
 		self._Hora6=self._Hora6.replace(hour=06, minute=00, second=00, microsecond=00)
-		print self._Hora6
+		#print self._Hora6
 		self._Hora24=datetime.today()
 		self._Hora24=self._Hora24.replace(hour=23, minute=59, second=59, microsecond=9999)
 		self.setSaldo()
@@ -204,9 +204,4 @@ class Viaje:
 
 
 
-cientoveintidos = Colectivo("semtur", 122, 2323)
 
-azul = TarjetaMedioBoleto()
-
-
-print azul.PagarBoleto(cientoveintidos)
