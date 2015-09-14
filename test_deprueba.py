@@ -187,7 +187,7 @@ def test_PagarBoleto():
 
 	cole1 = Colectivo("Semtur", 122, 1111)
 	cole2 = Colectivo("Rosario", 'k', 7493)
-	cole3 = Colectivo("Mixta", 101, 0666)
+	cole3 = Colectivo("Mixta", 101, 1111)
 
 	#Pagar un boleto cuando recien se incia la tarjeta
 	assert azul.PagarBoleto(cole1) == False
@@ -256,28 +256,162 @@ def test_Viajes():
 
 	cole1 = Colectivo("Semtur", 122, 1111)
 	cole2 = Colectivo("Rosario", 'k', 7493)
-	cole3 = Colectivo("Mixta", 101, 0666)
+	cole3 = Colectivo("Mixta", 101, 6666)
 
-	#Le doy carga suficiente a las tarjetas
+	#Le doy carga suficiente a las tarjetas. Hago las pruebas para una tarjeta de cada tipo
 	azul.Recarga(368)	
-	amarillo.Recarga(368)	
 	naranja.Recarga(368)	
-	violeta.Recarga(368)
 
-	#Hago 3 viajes con cada tarjeta, pero alternando entre transbordos o no transbordos
+	#Hago 9 viajes con cada tarjeta, pero alternando entre transbordos o no transbordos, para comprobar que los dos tipos de viaje se agregan a la lista de viajes realizados
 	#normal, normal, normal
 	azul.PagarBoleto(cole1)	
 	azul.PagarBoleto(cole1)	
 	azul.PagarBoleto(cole1)
 
 	#normal, normal, transbordo
-	amarillo.PagarBoleto(cole1)	
-	amarillo.PagarBoleto(cole1)	
-	amarillo.PagarBoleto(cole2)
+	azul.PagarBoleto(cole1)	
+	azul.PagarBoleto(cole1)	
+	azul.PagarBoleto(cole2)
+
+	#normal, transbordo, normal 
+	azul.PagarBoleto(cole1)	
+	azul.PagarBoleto(cole2)	
+	azul.PagarBoleto(cole3)
+
+	#Los assert van a comprobar el colectivo y el tipo de viaje de cada viaje realizado
+	#Primeros 3 viajes
+	i=0
+	assert azul.getViajesRealizados()[i].getColectivo().getEmpresa() == "Semtur"
+	assert azul.getViajesRealizados()[i].getColectivo().getLinea() == 122
+	assert azul.getViajesRealizados()[i].getColectivo().getNint() == 1111
+	assert azul.getViajesRealizados()[i].getMonto() == 5.75
+
+	i+=1
+	assert azul.getViajesRealizados()[i].getColectivo().getEmpresa() == "Semtur"
+	assert azul.getViajesRealizados()[i].getColectivo().getLinea() == 122
+	assert azul.getViajesRealizados()[i].getColectivo().getNint() == 1111
+	assert azul.getViajesRealizados()[i].getMonto() == 5.75
+
+	i+=1
+	assert azul.getViajesRealizados()[i].getColectivo().getEmpresa() == "Semtur"
+	assert azul.getViajesRealizados()[i].getColectivo().getLinea() == 122
+	assert azul.getViajesRealizados()[i].getColectivo().getNint() == 1111
+	assert azul.getViajesRealizados()[i].getMonto() == 5.75
+
+	#Siguientes 3 viajes
+	i+=1
+	assert azul.getViajesRealizados()[i].getColectivo().getEmpresa() == "Semtur"
+	assert azul.getViajesRealizados()[i].getColectivo().getLinea() == 122
+	assert azul.getViajesRealizados()[i].getColectivo().getNint() == 1111
+	assert azul.getViajesRealizados()[i].getMonto() == 5.75
+
+	i+=1
+	assert azul.getViajesRealizados()[i].getColectivo().getEmpresa() == "Semtur"
+	assert azul.getViajesRealizados()[i].getColectivo().getLinea() == 122
+	assert azul.getViajesRealizados()[i].getColectivo().getNint() == 1111
+	assert azul.getViajesRealizados()[i].getMonto() == 5.75
+
+	i+=1
+	assert azul.getViajesRealizados()[i].getColectivo().getEmpresa() == "Rosario"
+	assert azul.getViajesRealizados()[i].getColectivo().getLinea() == 'k'
+	assert azul.getViajesRealizados()[i].getColectivo().getNint() == 7493
+	assert azul.getViajesRealizados()[i].getMonto() == 1.90
+
+	#Ultimos 3 viajes
+	i+=1
+	assert azul.getViajesRealizados()[i].getColectivo().getEmpresa() == "Semtur"
+	assert azul.getViajesRealizados()[i].getColectivo().getLinea() == 122
+	assert azul.getViajesRealizados()[i].getColectivo().getNint() == 1111
+	assert azul.getViajesRealizados()[i].getMonto() == 5.75
+
+	i+=1
+	assert azul.getViajesRealizados()[i].getColectivo().getEmpresa() == "Rosario"
+	assert azul.getViajesRealizados()[i].getColectivo().getLinea() == 'k'
+	assert azul.getViajesRealizados()[i].getColectivo().getNint() == 7493
+	assert azul.getViajesRealizados()[i].getMonto() == 1.90
+
+	i+=1
+	assert azul.getViajesRealizados()[i].getColectivo().getEmpresa() == "Mixta"
+	assert azul.getViajesRealizados()[i].getColectivo().getLinea() == 101
+	assert azul.getViajesRealizados()[i].getColectivo().getNint() == 6666
+	assert azul.getViajesRealizados()[i].getMonto() == 5.75
+
+
+
+	#normal, normal, normal
+	naranja.PagarBoleto(cole1)	
+	naranja.PagarBoleto(cole1)	
+	naranja.PagarBoleto(cole1)
+
+	#normal, normal, transbordo
+	naranja.PagarBoleto(cole1)	
+	naranja.PagarBoleto(cole1)	
+	naranja.PagarBoleto(cole2)
 
 	#normal, transbordo, normal 
 	naranja.PagarBoleto(cole1)	
 	naranja.PagarBoleto(cole2)	
-	naranja.PagarBoleto(cole3)	
+	naranja.PagarBoleto(cole3)
 
-test_PagarBoleto()
+
+	#Los assert van a comprobar el colectivo y el tipo de viaje de cada viaje realizado
+	#Primeros 3 viajes
+	i=0
+	assert naranja.getViajesRealizados()[i].getColectivo().getEmpresa() == "Semtur"
+	assert naranja.getViajesRealizados()[i].getColectivo().getLinea() == 122
+	assert naranja.getViajesRealizados()[i].getColectivo().getNint() == 1111
+	assert naranja.getViajesRealizados()[i].getMonto() == 2.90
+
+	i+=1
+	assert naranja.getViajesRealizados()[i].getColectivo().getEmpresa() == "Semtur"
+	assert naranja.getViajesRealizados()[i].getColectivo().getLinea() == 122
+	assert naranja.getViajesRealizados()[i].getColectivo().getNint() == 1111
+	assert naranja.getViajesRealizados()[i].getMonto() == 2.90
+
+	i+=1
+	assert naranja.getViajesRealizados()[i].getColectivo().getEmpresa() == "Semtur"
+	assert naranja.getViajesRealizados()[i].getColectivo().getLinea() == 122
+	assert naranja.getViajesRealizados()[i].getColectivo().getNint() == 1111
+	assert naranja.getViajesRealizados()[i].getMonto() == 2.90
+
+	#Siguientes 3 viajes
+	i+=1
+	assert naranja.getViajesRealizados()[i].getColectivo().getEmpresa() == "Semtur"
+	assert naranja.getViajesRealizados()[i].getColectivo().getLinea() == 122
+	assert naranja.getViajesRealizados()[i].getColectivo().getNint() == 1111
+	assert naranja.getViajesRealizados()[i].getMonto() == 2.90
+
+	i+=1
+	assert naranja.getViajesRealizados()[i].getColectivo().getEmpresa() == "Semtur"
+	assert naranja.getViajesRealizados()[i].getColectivo().getLinea() == 122
+	assert naranja.getViajesRealizados()[i].getColectivo().getNint() == 1111
+	assert naranja.getViajesRealizados()[i].getMonto() == 2.90
+
+	i+=1
+	assert naranja.getViajesRealizados()[i].getColectivo().getEmpresa() == "Rosario"
+	assert naranja.getViajesRealizados()[i].getColectivo().getLinea() == 'k'
+	assert naranja.getViajesRealizados()[i].getColectivo().getNint() == 7493
+	assert naranja.getViajesRealizados()[i].getMonto() == 0.96
+
+	#Ultimos 3 viajes
+	i+=1
+	assert naranja.getViajesRealizados()[i].getColectivo().getEmpresa() == "Semtur"
+	assert naranja.getViajesRealizados()[i].getColectivo().getLinea() == 122
+	assert naranja.getViajesRealizados()[i].getColectivo().getNint() == 1111
+	assert naranja.getViajesRealizados()[i].getMonto() == 2.90
+
+	i+=1
+	assert naranja.getViajesRealizados()[i].getColectivo().getEmpresa() == "Rosario"
+	assert naranja.getViajesRealizados()[i].getColectivo().getLinea() == 'k'
+	assert naranja.getViajesRealizados()[i].getColectivo().getNint() == 7493
+	assert naranja.getViajesRealizados()[i].getMonto() == 0.96
+
+	i+=1
+	assert naranja.getViajesRealizados()[i].getColectivo().getEmpresa() == "Mixta"
+	assert naranja.getViajesRealizados()[i].getColectivo().getLinea() == 101
+	assert naranja.getViajesRealizados()[i].getColectivo().getNint() == 6666
+	assert naranja.getViajesRealizados()[i].getMonto() == 2.90
+
+
+
+#test_PagarBoleto()

@@ -64,20 +64,18 @@ class Tarjeta():
 
 
 	def EsTransbordo(self, hora, colectivo):
-		if(self._CantViajes!=1):
+		if(self._CantViajes==0):
 			return False
+			print ("No hay viajes")
 		else:
 			if(self._UltimoViaje.getMonto()==1.90 or self._UltimoViaje.getMonto()==0.96):
+				print ("No hay viajes")
 				return False
-			#Para hacerlo mas seguro, no confiamos en solo comparar con el numero de linea
-			#Ya que podemos tomar un colectivo de ida, y luego la misma linea de vuelta
-			#Tampoco comparamos solo el numero interno, porque distintas empresas pueden usar el mismo numero interno para distintos colectivos
-			#Por lo tanto, comparamos la empresa, el numero interno y la linea, para estar seguros de que el colectivo no es el mismo
-			if (hora-self._UltimoViaje.getHora() <= timedelta(hours=1) and self._UltimoViaje.getColectivo().getNint() != colectivo.getNint() and self._UltimoViaje.getColectivo().getLinea() != colectivo.getLinea() and self._UltimoViaje.getColectivo().getEmpresa() != colectivo.getEmpresa()):
+			#Comprobamos que haya menos de una hora de diferencia, y que las lineas sean distintas
+			if (hora-self._UltimoViaje.getHora() <= timedelta(hours=1) and colectivo.getLinea() != self._UltimoViaje.getColectivo().getLinea()):
 				return True
 			else:
 				return False
-
 
 
 class TarjetaComun(Tarjeta):
