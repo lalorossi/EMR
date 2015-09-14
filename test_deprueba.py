@@ -241,10 +241,10 @@ def test_PagarBoleto():
 	#4 viajes en el siguiente orden:
 	#normal, transbordo, normal, transbordo, pero no puedo pagar el ultimo
 	violeta.Recarga(7)
-	assert amarillo.PagarBoleto(cole1) == True
-	assert amarillo.PagarBoleto(cole2) == True
-	assert amarillo.PagarBoleto(cole2) == True
-	assert amarillo.PagarBoleto(cole1) == True
+	assert violeta.PagarBoleto(cole1) == True
+	assert violeta.PagarBoleto(cole2) == True
+	assert violeta.PagarBoleto(cole2) == True
+	assert violeta.PagarBoleto(cole1) == False
 
 def test_Viajes():
 
@@ -275,7 +275,9 @@ def test_Viajes():
 	amarillo.PagarBoleto(cole1)	
 	amarillo.PagarBoleto(cole2)
 
-	#normal, transbordo, normal
+	#normal, transbordo, normal 
 	naranja.PagarBoleto(cole1)	
 	naranja.PagarBoleto(cole2)	
 	naranja.PagarBoleto(cole3)	
+
+test_PagarBoleto()
