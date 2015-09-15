@@ -1,122 +1,5 @@
 from Tarjeta import *
 
-
-def Tarjeta():
-
-	#Pruebo de pagar boletos sin recarga
-	assert azul.PagarBoleto(cole1) == False
-	assert amarillo.PagarBoleto(cole2) == False
-	assert naranja.PagarBoleto(cole1) == False
-	assert violeta.PagarBoleto(cole2) == False
-
-
-	#Compruebo que no haya viajes realizados
-	assert azul.getViajesRealizados() == []
-	assert amarillo.getViajesRealizados() == []
-	assert naranja.getViajesRealizados() == []
-	assert violeta.getViajesRealizados() == []
-
-
-	#Recargo las tarjetas
-	azul.Recarga(3)
-	amarillo.Recarga(196)
-	naranja.Recarga(3)
-	violeta.Recarga(368)
-
-
-	#Compruebo si estan cargadas
-	assert azul.getSaldo() == 3
-	assert amarillo.getSaldo() == 230
-	assert naranja.getSaldo() == 3
-	assert violeta.getSaldo() == 460
-
-
-	#Pruebo de pagar boletos con la carga hecha
-	assert azul.PagarBoleto(cole1) == False
-	assert amarillo.PagarBoleto(cole2) == True
-	assert naranja.PagarBoleto(cole1) == True
-	assert violeta.PagarBoleto(cole1) == True
-
-
-	assert len(azul.getViajesRealizados()) == 0
-	assert len(amarillo.getViajesRealizados()) == 1
-	assert len(naranja.getViajesRealizados()) == 1
-	assert len(violeta.getViajesRealizados()) == 1
-
-	assert amarillo.getViajesRealizados()[amarillo.getCantViajes()-1].getColectivo().getLinea() == 'k'
-	assert naranja.getViajesRealizados()[naranja.getCantViajes()-1].getColectivo().getLinea() == 122
-	assert violeta.getViajesRealizados()[violeta.getCantViajes()-1].getColectivo().getLinea() == 122
-
-
-
-	#Compruebo las cargas de las tarjetas luego de pagar los boletos
-	#En algunos casos, escribir un numero con decimal en lugar de la resta del saldo y el monto, da problemas de redondeo
-	assert azul.getSaldo() == 3
-	assert amarillo.getSaldo() == 224.25
-	assert naranja.getSaldo() == 0.10
-	assert violeta.getSaldo() == 457.10
-
-
-	#Pruebo el transbordo con una tarjeta comun y otra de miedio boleto
-	#Con las otras tarjetas, compruebo que se hayan quedado sin carga
-	assert azul.PagarBoleto(cole2) == False 
-	assert amarillo.PagarBoleto(cole1) == True #TRANSBORDO
-	assert naranja.PagarBoleto(cole2) == False 
-	assert violeta.PagarBoleto(cole2) == True #TRANSBORDO
-
-
-	assert len(azul.getViajesRealizados()) == 0
-	assert len(amarillo.getViajesRealizados()) == 2
-	assert len(naranja.getViajesRealizados()) == 1
-	assert len(violeta.getViajesRealizados()) == 2
-
-
-	assert amarillo.getViajesRealizados()[amarillo.getCantViajes()-1].getColectivo().getLinea() == 122
-	assert naranja.getViajesRealizados()[naranja.getCantViajes()-1].getColectivo().getLinea() == 122
-	assert violeta.getViajesRealizados()[violeta.getCantViajes()-1].getColectivo().getLinea() == 'k'
-
-
-	#Luego compruebo sus cargas para saber si funciona el transbordo
-	assert azul.getSaldo() == 3
-	assert amarillo.getSaldo() == 222.35
-	assert naranja.getSaldo() == 0.10
-	assert violeta.getSaldo() == 456.14
-
-
-	#Ultima recarga, viaje y chequeo de saldo
-	azul.Recarga(2.75)
-	amarillo.Recarga(10)
-	naranja.Recarga(0.10)
-	violeta.Recarga(27)
-
-	assert azul.getSaldo() == (5.75)
-	assert amarillo.getSaldo() == (232.35)
-	assert naranja.getSaldo() == (0.2)
-	assert violeta.getSaldo() == (483.14)
-
-	assert azul.PagarBoleto(cole1) == True
-	assert amarillo.PagarBoleto(cole1) == True #No es transbordo, porque ya se uso antes
-	assert naranja.PagarBoleto(cole1) == False
-	assert violeta.PagarBoleto(cole2) == True
-
-
-	assert len(azul.getViajesRealizados()) == 1
-	assert len(amarillo.getViajesRealizados()) == 3
-	assert len(naranja.getViajesRealizados()) == 1
-	assert len(violeta.getViajesRealizados()) == 3
-
-	assert azul.getViajesRealizados()[azul.getCantViajes()-1].getColectivo().getLinea() == 122
-	assert amarillo.getViajesRealizados()[amarillo.getCantViajes()-1].getColectivo().getLinea() == 122
-	assert naranja.getViajesRealizados()[naranja.getCantViajes()-1].getColectivo().getLinea() == 122
-	assert violeta.getViajesRealizados()[violeta.getCantViajes()-1].getColectivo().getLinea() == 'k'
-
-
-	assert azul.getSaldo() == 0
-	assert amarillo.getSaldo() == (226.60)
-	assert naranja.getSaldo() == (0.2)
-	assert violeta.getSaldo() == (480.24)
-
-
 def test_Recarga():
 
 	azul = TarjetaComun()
@@ -137,7 +20,6 @@ def test_Recarga():
 	assert naranja.Recarga(5) == 5
 	assert violeta.Recarga(368) == 460
 	assert violeta.Recarga(-196) == 0
-
 
 def test_getSaldo():
 
@@ -173,9 +55,6 @@ def test_getSaldo():
 	assert violeta.getSaldo() == 460
 	violeta.Recarga(-196)
 	assert violeta.getSaldo() == 460
-
-
-
 
 def test_PagarBoleto():
 
@@ -221,30 +100,58 @@ def test_PagarBoleto():
 	assert amarillo.PagarBoleto(cole2) == True
 
 	#Tomar dos colectivos iguales sin suficiente saldo, y luego un transbordo con saldo suficiente, pero con los precios de medio boleto
+
+	############################################################################################
+	#																						   #
+	#   AHORA PROBAMOS CON DEFINIR UNA VARIABLE DE HORA PARA USAR EN LUGAR DE LA HORA ACTUAL   #
+	#   		   PARA PODER USAR EL MEDIO BOLETO SIN CONSULTAR LA HORA ACTUAL	               #
+	#																						   #
+	############################################################################################
+
+	horaMedio=datetime.today()
+	horaMedio=horaMedio.replace(hour=07, minute=00, second=00, microsecond=00)
+	
+	#La tarjeta naranja se prueba dentro del horario de medio boleto
 	naranja.Recarga(4)
-	assert naranja.PagarBoleto(cole1) == True
-	assert naranja.PagarBoleto(cole1) == False
-	assert naranja.PagarBoleto(cole2) == True
+	assert naranja.PagarBoleto(cole1, horaMedio) == True
+	assert naranja.PagarBoleto(cole1, horaMedio) == False
+	assert naranja.PagarBoleto(cole2, horaMedio) == True
 
 
 	#Pagar el boleto con plata insuficiente (no con $0 de saldo)
 	naranja.Recarga(0)
-	assert naranja.PagarBoleto(cole1) == False
+	assert naranja.PagarBoleto(cole1, horaMedio) == False
 
 
+	horaNoMedio=datetime.today()
+	horaNoMedio=horaNoMedio.replace(hour=03, minute=00, second=00, microsecond=00)
+
+	#La tarjeta violeta se toma fuera de horario de medio boleto
 	#Dos medio boleto en el mismo colectivo
 	violeta.Recarga(6)
-	assert violeta.PagarBoleto(cole1) == True
-	assert violeta.PagarBoleto(cole1) == True
+	assert violeta.PagarBoleto(cole1, horaNoMedio) == True
+	assert violeta.PagarBoleto(cole1, horaNoMedio) == False
 
 
 	#4 viajes en el siguiente orden:
 	#normal, transbordo, normal, transbordo, pero no puedo pagar el ultimo
-	violeta.Recarga(7)
-	assert violeta.PagarBoleto(cole1) == True
-	assert violeta.PagarBoleto(cole2) == True
-	assert violeta.PagarBoleto(cole2) == True
-	assert violeta.PagarBoleto(cole1) == False
+	violeta.Recarga(14)
+	assert violeta.PagarBoleto(cole1, horaNoMedio) == True
+	assert violeta.PagarBoleto(cole2, horaNoMedio) == True
+	assert violeta.PagarBoleto(cole2, horaNoMedio) == True
+	assert violeta.PagarBoleto(cole1, horaNoMedio) == False
+
+################################################################################################
+#Probamos el transbordo fallido, pero esta vez por la diferencia entre horas. Anteriormente solo se habia probado por tomarse dos veces el mismo colectivo. Para esto, creamos una nueva tarjeta
+
+	rojo = TarjetaComun()
+
+	#Le damos suficiente carga para un solo boleto, pero no el siguiente, a menos que sea tranbordo (como no lo es, se supone que no se deberia poder pagar)
+	#Para probar con una diferencia de mas de una hora, se usan las horas dentro y fuera del horario de medio boleto
+	rojo.Recarga(10)
+	assert rojo.PagarBoleto(cole2, horaNoMedio) == True
+	assert rojo.PagarBoleto(cole1, horaMedio) == False
+
 
 def test_Viajes():
 
@@ -411,7 +318,3 @@ def test_Viajes():
 	assert naranja.getViajesRealizados()[i].getColectivo().getLinea() == 101
 	assert naranja.getViajesRealizados()[i].getColectivo().getNint() == 6666
 	assert naranja.getViajesRealizados()[i].getMonto() == 2.90
-
-
-
-#test_PagarBoleto()

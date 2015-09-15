@@ -7,8 +7,6 @@ import math
 def trunc(invalue, digits):
     return int(invalue*math.pow(10,digits))/math.pow(10,digits)
 
-
-
 class Tarjeta():
 	def __init__(self):
 		print	("No se pueden crear tarjetas sin un tipo")
@@ -59,17 +57,11 @@ class Tarjeta():
 		else:
 			return 0
 
-
-
-
-
 	def EsTransbordo(self, hora, colectivo):
 		if(self._CantViajes==0):
 			return False
-			print ("No hay viajes")
 		else:
 			if(self._UltimoViaje.getMonto()==1.90 or self._UltimoViaje.getMonto()==0.96):
-				print ("No hay viajes")
 				return False
 			#Comprobamos que haya menos de una hora de diferencia, y que las lineas sean distintas
 			if (hora-self._UltimoViaje.getHora() <= timedelta(hours=1) and colectivo.getLinea() != self._UltimoViaje.getColectivo().getLinea()):
@@ -84,9 +76,9 @@ class TarjetaComun(Tarjeta):
 		self.setSaldo()
 		self.setViajes()
 
-	def PagarBoleto(self, colectivo):
+	def PagarBoleto(self, colectivo, hora=datetime.today()):
 
-		hora = datetime.today()
+		self._hora=hora
 
 		if(self.EsTransbordo(hora, colectivo)==False):
 			if (self.getSaldo() >= 5.75):
@@ -124,9 +116,9 @@ class TarjetaMedioBoleto(Tarjeta):
 		self.setSaldo()
 		self.setViajes()
 
-	def PagarBoleto(self, colectivo):
+	def PagarBoleto(self, colectivo, hora=datetime.today()):
 
-		self._hora = datetime.today()
+		self._hora = hora
 		
 		if (self.EsTransbordo(self._hora, colectivo)==False):
 			if self._hora >= self._Hora6 and self._hora <= self._Hora24:
