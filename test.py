@@ -1,4 +1,4 @@
-from Tarjeta import *
+from EMR import *
 
 def test_Recarga():
 
